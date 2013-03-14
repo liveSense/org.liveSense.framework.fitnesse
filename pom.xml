@@ -1,0 +1,265 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.github.livesense</groupId>
+		<artifactId>org.livesense.parent</artifactId>
+		<version>2-SNAPSHOT</version>
+		<relativePath>../org.liveSense.parent/pom.xml</relativePath>
+	</parent>
+
+	<groupId>com.github.livesense</groupId>
+	<artifactId>org.liveSense.framework.fitnesse</artifactId>
+	<name>fitnesse</name>
+	<description> The fully integrated standalone wiki, and acceptance
+    testing framework. </description>
+	<url>http://fitnesse.org</url>
+	<version>20121202</version>
+	<packaging>bundle</packaging>
+	<licenses>
+		<license>
+			<name>GNU Public License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+            <scope>compile</scope>
+			<!--<optional>true</optional>
+			<scope>test</scope>-->
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.7</version>
+            <scope>compile</scope>
+			<!--<optional>true</optional>
+			<scope>test</scope>-->
+		</dependency>
+		<dependency>
+			<groupId>org.htmlparser</groupId>
+			<artifactId>htmlparser</artifactId>
+			<version>2.1</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.htmlparser</groupId>
+			<artifactId>htmllexer</artifactId>
+			<version>2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymock</artifactId>
+			<version>2.4</version>
+            <scope>compile</scope>
+<!--			<optional>true</optional>
+			<scope>test</scope>-->
+		</dependency>
+		<dependency>
+			<groupId>org.tmatesoft</groupId>
+			<artifactId>svn</artifactId>
+			<version>1.1.0</version>
+			<optional>true</optional>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.ant</groupId>
+			<artifactId>ant</artifactId>
+			<version>1.7.1</version>
+			<optional>true</optional>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.velocity</groupId>
+			<artifactId>velocity</artifactId>
+			<version>1.7</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>oro</groupId>
+			<artifactId>oro</artifactId>
+			<version>2.0.8</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20090211</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+	<build>
+        <sourceDirectory>src</sourceDirectory>
+		<plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*Test.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<configuration>
+					<executable>java</executable>
+					<arguments>
+						<argument>-classpath</argument>
+						<classpath/>
+						<argument>fitnesseMain.FitNesseMain</argument>
+						<argument>-p</argument>
+						<argument>8880</argument>
+						<argument>-d</argument>
+						<argument>${basedir}/target/classes/Resources</argument>
+					</arguments>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.8.1</version>
+				<configuration>
+					<includes>
+						<include>**/*Test.java</include>
+					</includes>
+				</configuration>
+			</plugin>
+
+<!--
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>${basedir}/FitNesseRoot</directory>
+						</fileset>
+					</filesets>
+
+				</configuration>
+			</plugin>
+-->
+
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+                        <phase>process-resources</phase>
+						<configuration>
+							<tasks>
+                                <mkdir dir="${project.build.directory}/classes/Resources" />
+                                <mkdir dir="${project.build.directory}/classes/fitnesse/resources" />
+								<copydir src="${basedir}/FitNesseRoot" dest="${project.build.directory}/classes/Resources/FitNesseRoot"/>
+                                <copydir src="${basedir}/src/fitnesse/resources" dest="${project.build.directory}/classes/fitnesse/resources"/>
+
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+
+<!--
+                        <java classpath="${classes}" classname="fitnesse.updates.UpdateFileList" failonerror="true">
+                                <arg value="-baseDirectory:." />
+                                <arg value="-outputDirectory:${classes}/Resources" />
+                                <arg value="-doNotReplace:FitNesseRoot/FrontPage/content.txt" />
+                                <arg value="-doNotReplace:FitNesseRoot/FrontPage/properties.xml" />
+                                <arg value="-doNotReplace:FitNesseRoot/PageHeader/content.txt" />
+                                <arg value="-doNotReplace:FitNesseRoot/PageHeader/properties.xml" />
+                                <arg value="-doNotReplace:FitNesseRoot/PageFooter/content.txt" />
+                                <arg value="-doNotReplace:FitNesseRoot/PageFooter/properties.xml" />
+                                <arg value="FitNesseRoot/FitNesse" />
+                                <arg value="FitNesseRoot/FrontPage" />
+                                <arg value="FitNesseRoot/PageFooter" />
+                                <arg value="FitNesseRoot/PageHeader" />
+                        </java> -->
+				</executions>
+			</plugin>
+            
+            
+             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <executable>java</executable>
+                    <includeProjectDependencies>true</includeProjectDependencies>
+                    <arguments>
+                                <argument>-classpath</argument>
+                                <!-- automatically creates the classpath using all project dependencies,
+                                also adding the project build directory -->
+                                <classpath/>
+                                <argument>fitnesse.updates.UpdateFileList</argument>                                
+                                <argument>-baseDirectory:.</argument>
+                                <argument>-outputDirectory:${project.build.directory}/classes/Resources</argument>
+                                <argument>-doNotReplace:FitNesseRoot/FrontPage/content.txt</argument>
+                                <argument>-doNotReplace:FitNesseRoot/FrontPage/properties.xml</argument>
+                                <argument>-doNotReplace:FitNesseRoot/PageHeader/content.txt</argument>
+                                <argument>-doNotReplace:FitNesseRoot/PageHeader/properties.xml</argument>
+                                <argument>-doNotReplace:FitNesseRoot/PageFooter/content.txt</argument>
+                                <argument>-doNotReplace:FitNesseRoot/PageFooter/properties.xml</argument>
+                                <argument>FitNesseRoot/FitNesse</argument>
+                                <argument>FitNesseRoot/FrontPage</argument>
+                                <argument>FitNesseRoot/PageFooter</argument>
+                                <argument>FitNesseRoot/PageHeader</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Main-Class>fitnesseMain.FitNesseMain</Main-Class>
+   						<Include-Resource>
+                            ${project.build.directory}/classes,
+							{maven-resources}
+						</Include-Resource>
+
+						<Embed-Dependency>
+							htmlparser;inline=true,
+							htmllexer;inline=true,
+							velocity;inline=true,
+							json;inline=true,
+							commons-collections;inline=true,
+							commons-lang;inline=true,
+							oro;inline=true
+						</Embed-Dependency>
+					</instructions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
