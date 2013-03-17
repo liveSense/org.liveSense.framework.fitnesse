@@ -13,7 +13,7 @@
 	<description> The fully integrated standalone wiki, and acceptance
     testing framework. </description>
 	<url>http://fitnesse.org</url>
-	<version>20121202</version>
+	<version>20130316</version>
 	<packaging>bundle</packaging>
 	<licenses>
 		<license>
