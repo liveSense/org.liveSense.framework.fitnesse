@@ -1177,11 +1177,10 @@ Wysiwyg.prototype.insertTableColumn = function (after) {
         var length = rows.length;
         var cellIndex = focus.cell.cellIndex + (after ? 1 : 0);
         var i;
-        for (i = 1; i < length; i++) {
+        for (i = 0; i < length; i++) {
             var row = rows[i];
             this.insertTableCell(row, Math.min(cellIndex, row.cells.length));
         }
-        this.spanTableColumns(focus.table);
     }
 };
 
@@ -1214,13 +1213,12 @@ Wysiwyg.prototype.deleteTableColumn = function () {
         var length = rows.length;
         var cellIndex = focus.cell.cellIndex;
         var i;
-        for (i = 1; i < length; i++) {
+        for (i = 0; i < length; i++) {
             var row = rows[i];
             if (cellIndex < row.cells.length) {
                 row.deleteCell(cellIndex);
             }
         }
-        this.spanTableColumns(focus.table);
     }
 };
 
@@ -2602,16 +2600,11 @@ Wysiwyg.prototype.domToWikitext = function (root, options) {
         if (!/\]/.test(label) && !/^[\"\']/.test(label)) {
             return "[[" + label + "][" + link + "]]";
         }
-        if (!/\"/.test(label)) {
-            return "[[" + label + ']["' + link + '"]]';
-        }
-        if (!/\'/.test(label)) {
-            return "[[" + label + "]['" + link + "']]";
-        }
-        return "[[" + label.replace(/"+/g, "") + ' ]["' + link + '"]]';
+        return "[[" + label.replace(/"+/g, "") + "][" + link + "]]";
     }
 
     function pushAnchor(node, bracket) {
+        var _texts = texts;
         var link = node.getAttribute("data-wysiwyg-link");
         var autolink = node.getAttribute("data-wysiwyg-autolink");
 
@@ -2630,7 +2623,7 @@ Wysiwyg.prototype.domToWikitext = function (root, options) {
         if (text === null) {
             text = linkText(link, label);
         }
-        pushTextWithDecorations(text, node);
+        _texts.push(text);
     }
 
     function string(source, times) {
