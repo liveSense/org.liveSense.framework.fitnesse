@@ -7,13 +7,12 @@
 		<relativePath>../org.liveSense.parent/pom.xml</relativePath>
 	</parent>
 
-	<groupId>com.github.livesense</groupId>
 	<artifactId>org.liveSense.framework.fitnesse</artifactId>
-	<name>fitnesse</name>
+	<name>liveSense :: Framework :: fitnesse</name>
 	<description> The fully integrated standalone wiki, and acceptance
     testing framework. </description>
 	<url>http://fitnesse.org</url>
-	<version>20130316</version>
+	<version>20130316_1-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<licenses>
 		<license>
@@ -27,7 +26,7 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.10</version>
-            <scope>compile</scope>
+			<scope>compile</scope>
 			<!--<optional>true</optional>
 			<scope>test</scope>-->
 		</dependency>
@@ -35,7 +34,7 @@
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<version>1.7</version>
-            <scope>compile</scope>
+			<scope>compile</scope>
 			<!--<optional>true</optional>
 			<scope>test</scope>-->
 		</dependency>
@@ -54,7 +53,7 @@
 			<groupId>org.easymock</groupId>
 			<artifactId>easymock</artifactId>
 			<version>2.4</version>
-            <scope>compile</scope>
+			<scope>compile</scope>
 <!--			<optional>true</optional>
 			<scope>test</scope>-->
 		</dependency>
@@ -89,31 +88,38 @@
 			<artifactId>commons-lang</artifactId>
 			<scope>provided</scope>
 		</dependency>
+<!-- 
 		<dependency>
 			<groupId>oro</groupId>
 			<artifactId>oro</artifactId>
 			<version>2.0.8</version>
 			<scope>provided</scope>
 		</dependency>
+-->
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20090211</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.googlecode.java-diff-utils</groupId>
+			<artifactId>diffutils</artifactId>
+			<version>1.2</version>
+		</dependency>
 	</dependencies>
 	<build>
-        <sourceDirectory>src</sourceDirectory>
+		<sourceDirectory>src</sourceDirectory>
 		<plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>**/*Test.java</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>**/*Test.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
@@ -167,13 +173,13 @@
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
-                        <phase>process-resources</phase>
+						<phase>process-resources</phase>
 						<configuration>
 							<tasks>
-                                <mkdir dir="${project.build.directory}/classes/Resources" />
-                                <mkdir dir="${project.build.directory}/classes/fitnesse/resources" />
+								<mkdir dir="${project.build.directory}/classes/Resources"/>
+								<mkdir dir="${project.build.directory}/classes/fitnesse/resources"/>
 								<copydir src="${basedir}/FitNesseRoot" dest="${project.build.directory}/classes/Resources/FitNesseRoot"/>
-                                <copydir src="${basedir}/src/fitnesse/resources" dest="${project.build.directory}/classes/fitnesse/resources"/>
+								<copydir src="${basedir}/src/fitnesse/resources" dest="${project.build.directory}/classes/fitnesse/resources"/>
 
 							</tasks>
 						</configuration>
@@ -199,43 +205,43 @@
                         </java> -->
 				</executions>
 			</plugin>
-            
-            
-             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <executable>java</executable>
-                    <includeProjectDependencies>true</includeProjectDependencies>
-                    <arguments>
-                                <argument>-classpath</argument>
+
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<executable>java</executable>
+					<includeProjectDependencies>true</includeProjectDependencies>
+					<arguments>
+						<argument>-classpath</argument>
                                 <!-- automatically creates the classpath using all project dependencies,
                                 also adding the project build directory -->
-                                <classpath/>
-                                <argument>fitnesse.updates.UpdateFileList</argument>                                
-                                <argument>-baseDirectory:.</argument>
-                                <argument>-outputDirectory:${project.build.directory}/classes/Resources</argument>
-                                <argument>-doNotReplace:FitNesseRoot/FrontPage/content.txt</argument>
-                                <argument>-doNotReplace:FitNesseRoot/FrontPage/properties.xml</argument>
-                                <argument>-doNotReplace:FitNesseRoot/PageHeader/content.txt</argument>
-                                <argument>-doNotReplace:FitNesseRoot/PageHeader/properties.xml</argument>
-                                <argument>-doNotReplace:FitNesseRoot/PageFooter/content.txt</argument>
-                                <argument>-doNotReplace:FitNesseRoot/PageFooter/properties.xml</argument>
-                                <argument>FitNesseRoot/FitNesse</argument>
-                                <argument>FitNesseRoot/FrontPage</argument>
-                                <argument>FitNesseRoot/PageFooter</argument>
-                                <argument>FitNesseRoot/PageHeader</argument>
-                    </arguments>
-                </configuration>
-            </plugin>
+						<classpath/>
+						<argument>fitnesse.updates.UpdateFileList</argument>
+						<argument>-baseDirectory:.</argument>
+						<argument>-outputDirectory:${project.build.directory}/classes/Resources</argument>
+						<argument>-doNotReplace:FitNesseRoot/FrontPage/content.txt</argument>
+						<argument>-doNotReplace:FitNesseRoot/FrontPage/properties.xml</argument>
+						<argument>-doNotReplace:FitNesseRoot/PageHeader/content.txt</argument>
+						<argument>-doNotReplace:FitNesseRoot/PageHeader/properties.xml</argument>
+						<argument>-doNotReplace:FitNesseRoot/PageFooter/content.txt</argument>
+						<argument>-doNotReplace:FitNesseRoot/PageFooter/properties.xml</argument>
+						<argument>FitNesseRoot/FitNesse</argument>
+						<argument>FitNesseRoot/FrontPage</argument>
+						<argument>FitNesseRoot/PageFooter</argument>
+						<argument>FitNesseRoot/PageHeader</argument>
+					</arguments>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
@@ -243,11 +249,33 @@
 				<configuration>
 					<instructions>
 						<Main-Class>fitnesseMain.FitNesseMain</Main-Class>
-   						<Include-Resource>
-                            ${project.build.directory}/classes,
+						<Include-Resource>
+							${project.build.directory}/classes,
 							{maven-resources}
 						</Include-Resource>
 
+						<Import-Package>
+							com.werken.xpath.*;resolution:=optional,
+							junit.framework.*;resolution:=optional,
+							org.apache.log.*;resolution:=optional,
+							org.apache.log.format.*;resolution:=optional,
+							org.apache.log.output.io.*;resolution:=optional,
+							org.apache.oro.text.perl.*;resolution:=optional,
+							org.jdom.*;resolution:=optional,
+							org.jdom.input.*;resolution:=optional,
+							org.jdom.output.*;resolution:=optional,
+							org.junit.*;resolution:=optional,
+							org.junit.runner.*;resolution:=optional,
+							org.junit.runner.notification.*;resolution:=optional,
+							org.junit.runners.*;resolution:=optional,
+							org.junit.runners.model.*;resolution:=optional,
+							org.mockito.*;resolution:=optional,
+							org.mockito.internal.progress.*;resolution:=optional,
+							org.apache.tools.ant.*;resolution:=optional,
+							org.apache.tools.ant.taskdefs.*;resolution:=optional,
+							org.apache.tools.ant.types.*;resolution:=optional,
+							*;resolution:=mandatory
+						</Import-Package>
 						<Embed-Dependency>
 							htmlparser;inline=true,
 							htmllexer;inline=true,
@@ -255,7 +283,7 @@
 							json;inline=true,
 							commons-collections;inline=true,
 							commons-lang;inline=true,
-							oro;inline=true
+							diffutils;inline=true;
 						</Embed-Dependency>
 					</instructions>
 				</configuration>
