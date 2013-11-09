@@ -2,9 +2,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.github.livesense</groupId>
-		<artifactId>org.livesense.parent</artifactId>
+		<artifactId>org.liveSense.parent</artifactId>
 		<version>2-SNAPSHOT</version>
-		<relativePath>../org.liveSense.parent/pom.xml</relativePath>
+		<relativePath>..</relativePath>
 	</parent>
 
 	<artifactId>org.liveSense.framework.fitnesse</artifactId>
@@ -88,6 +88,12 @@
 			<artifactId>commons-lang</artifactId>
 			<scope>provided</scope>
 		</dependency>
+        
+        <dependency>
+            <groupId>org.eclipse.jgit</groupId>
+            <artifactId>org.eclipse.jgit</artifactId>
+            <version>3.1.0.201310021548-r</version>
+        </dependency>
 <!-- 
 		<dependency>
 			<groupId>oro</groupId>
@@ -123,26 +129,56 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
-				<configuration>
-					<executable>java</executable>
-					<arguments>
-						<argument>-classpath</argument>
-						<classpath/>
-						<argument>fitnesseMain.FitNesseMain</argument>
-						<argument>-p</argument>
-						<argument>8880</argument>
-						<argument>-d</argument>
-						<argument>${basedir}/target/classes/Resources</argument>
-					</arguments>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
+				<executions>
+                    <!--
+                    <execution>
+                        <configuration>
+                            <executable>java</executable>
+                            <arguments>
+                                <argument>-classpath</argument>
+                                <classpath/>
+                                <argument>fitnesseMain.FitNesseMain</argument>
+                                <argument>-p</argument>
+                                <argument>8880</argument>
+                                <argument>-d</argument>
+                                <argument>${basedir}/target/classes/Resources</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    -->
+                    <execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+                        <configuration>
+                            <executable>java</executable>
+                            <includeProjectDependencies>true</includeProjectDependencies>
+                            <arguments>
+                                <argument>-classpath</argument>
+                                <!-- automatically creates the classpath using all project dependencies,
+                                 also adding the project build directory -->
+                                <classpath/>
+                                <argument>fitnesse.updates.UpdateFileList</argument>
+                                <argument>-baseDirectory:.</argument>
+                                <argument>-outputDirectory:${project.build.directory}/classes/Resources</argument>
+                                <argument>-doNotReplace:FitNesseRoot/FrontPage/content.txt</argument>
+                                <argument>-doNotReplace:FitNesseRoot/FrontPage/properties.xml</argument>
+                                <argument>-doNotReplace:FitNesseRoot/PageHeader/content.txt</argument>
+                                <argument>-doNotReplace:FitNesseRoot/PageHeader/properties.xml</argument>
+                                <argument>-doNotReplace:FitNesseRoot/PageFooter/content.txt</argument>
+                                <argument>-doNotReplace:FitNesseRoot/PageFooter/properties.xml</argument>
+                                <argument>FitNesseRoot/FitNesse</argument>
+                                <argument>FitNesseRoot/FrontPage</argument>
+                                <argument>FitNesseRoot/PageFooter</argument>
+                                <argument>FitNesseRoot/PageHeader</argument>
+                            </arguments>
+                        </configuration>
+					</execution>
+
+                </executions>
+
+            </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -206,42 +242,6 @@
 				</executions>
 			</plugin>
 
-
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>compile</phase>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<executable>java</executable>
-					<includeProjectDependencies>true</includeProjectDependencies>
-					<arguments>
-						<argument>-classpath</argument>
-                                <!-- automatically creates the classpath using all project dependencies,
-                                also adding the project build directory -->
-						<classpath/>
-						<argument>fitnesse.updates.UpdateFileList</argument>
-						<argument>-baseDirectory:.</argument>
-						<argument>-outputDirectory:${project.build.directory}/classes/Resources</argument>
-						<argument>-doNotReplace:FitNesseRoot/FrontPage/content.txt</argument>
-						<argument>-doNotReplace:FitNesseRoot/FrontPage/properties.xml</argument>
-						<argument>-doNotReplace:FitNesseRoot/PageHeader/content.txt</argument>
-						<argument>-doNotReplace:FitNesseRoot/PageHeader/properties.xml</argument>
-						<argument>-doNotReplace:FitNesseRoot/PageFooter/content.txt</argument>
-						<argument>-doNotReplace:FitNesseRoot/PageFooter/properties.xml</argument>
-						<argument>FitNesseRoot/FitNesse</argument>
-						<argument>FitNesseRoot/FrontPage</argument>
-						<argument>FitNesseRoot/PageFooter</argument>
-						<argument>FitNesseRoot/PageHeader</argument>
-					</arguments>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
@@ -258,22 +258,12 @@
 							com.werken.xpath.*;resolution:=optional,
 							junit.framework.*;resolution:=optional,
 							org.apache.log.*;resolution:=optional,
-							org.apache.log.format.*;resolution:=optional,
-							org.apache.log.output.io.*;resolution:=optional,
 							org.apache.oro.text.perl.*;resolution:=optional,
 							org.jdom.*;resolution:=optional,
-							org.jdom.input.*;resolution:=optional,
-							org.jdom.output.*;resolution:=optional,
 							org.junit.*;resolution:=optional,
-							org.junit.runner.*;resolution:=optional,
-							org.junit.runner.notification.*;resolution:=optional,
-							org.junit.runners.*;resolution:=optional,
-							org.junit.runners.model.*;resolution:=optional,
 							org.mockito.*;resolution:=optional,
-							org.mockito.internal.progress.*;resolution:=optional,
 							org.apache.tools.ant.*;resolution:=optional,
-							org.apache.tools.ant.taskdefs.*;resolution:=optional,
-							org.apache.tools.ant.types.*;resolution:=optional,
+                            org.eclipse.jgit.*;resolution:=optional,
 							*;resolution:=mandatory
 						</Import-Package>
 						<Embed-Dependency>
