@@ -1,7 +1,7 @@
 package fitnesse.responders.editing;
 
 import static fitnesse.wiki.PageData.PAGE_TYPE_ATTRIBUTES;
-import util.TemplateUtil;
+
 import fitnesse.FitNesseContext;
 import fitnesse.Responder;
 import fitnesse.authentication.SecureOperation;
@@ -9,8 +9,8 @@ import fitnesse.authentication.SecureReadOperation;
 import fitnesse.http.Request;
 import fitnesse.http.Response;
 import fitnesse.http.SimpleResponse;
-import fitnesse.responders.templateUtilities.HtmlPage;
-import fitnesse.responders.templateUtilities.PageTitle;
+import fitnesse.html.template.HtmlPage;
+import fitnesse.html.template.PageTitle;
 import fitnesse.wiki.PageCrawler;
 import fitnesse.wiki.PageType;
 import fitnesse.wiki.PathParser;
@@ -18,6 +18,8 @@ import fitnesse.wiki.WikiPage;
 import fitnesse.wiki.WikiPagePath;
 
 public class NewPageResponder implements Responder {
+  public static final String DEFAULT_PAGE_CONTENT_PROPERTY = "newpage.default.content";
+  public static final String DEFAULT_PAGE_CONTENT = "!contents -R2 -g -p -f -h";
 
   public Response makeResponse(FitNesseContext context, Request request) {
 
@@ -44,7 +46,7 @@ public class NewPageResponder implements Responder {
     html.put(EditResponder.HELP_TEXT, "");
 
     html.put(EditResponder.TEMPLATE_MAP, TemplateUtil.getTemplateMap(getParentWikiPage(context, request)));
-    html.put(EditResponder.CONTENT_INPUT_NAME, context.defaultNewPageContent);
+    html.put(EditResponder.CONTENT_INPUT_NAME, getDefaultContent(context));
     if (request.hasInput("pageType")) {
       String pageType = (String) request.getInput("pageType");
       // Validate page type:
@@ -55,13 +57,21 @@ public class NewPageResponder implements Responder {
     }
   }
 
+  public static String getDefaultContent(FitNesseContext context) {
+    String content = context.getProperty(DEFAULT_PAGE_CONTENT_PROPERTY);
+    if (content == null) {
+      content = DEFAULT_PAGE_CONTENT;
+    }
+    return content;
+  }
+
   private WikiPage getParentWikiPage(FitNesseContext context, Request request) {
     //the request resource is already th parent path.
     WikiPagePath parentPath = PathParser.parse(request.getResource());
 
-    //we need a crawler to get the page from the path. The root has a crawler we can use.
+    //we need a pageBuilder to get the page from the path. The root has a pageBuilder we can use.
     PageCrawler crawler = context.root.getPageCrawler();
-    WikiPage page = crawler.getPage(context.root, parentPath);
+    WikiPage page = crawler.getPage(parentPath);
     return page;
   }
 

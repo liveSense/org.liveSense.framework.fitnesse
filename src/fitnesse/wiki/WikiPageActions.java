@@ -5,8 +5,6 @@ package fitnesse.wiki;
 public class WikiPageActions {
 
   private WikiPage page;
-  private boolean addChild; // normal wiki page
-  private boolean pageHistory; // test results
 
   public WikiPageActions(WikiPage page) {
     super();
@@ -50,7 +48,7 @@ public class WikiPageActions {
   }
 
   public boolean isWithVersions() {
-    return hasAction("Versions") && PageVersionPruner.daysTillVersionsExpire > 0;
+    return hasAction("Versions");
   }
 
   public boolean isWithRecentChanges() {
@@ -88,25 +86,9 @@ public class WikiPageActions {
 
   public String getLocalPageName() {
     if (page != null) {
-      WikiPagePath localPagePath = page.getPageCrawler().getFullPath(page);
+      WikiPagePath localPagePath = page.getPageCrawler().getFullPath();
       return PathParser.render(localPagePath);
     }
     return null;
-  }
-
-  public String getLocalOrRemotePageName() {
-    String localOrRemotePageName = getLocalPageName();
-
-    if (page instanceof ProxyPage) {
-      localOrRemotePageName = ((ProxyPage) page).getThisPageUrl();
-    }
-    return localOrRemotePageName;
-  }
-
-  public boolean isNewWindowIfRemote() {
-    if (page != null) {
-      return page.isOpenInNewWindow();
-    }
-    return false;
   }
 }

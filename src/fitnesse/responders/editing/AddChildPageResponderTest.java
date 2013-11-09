@@ -1,23 +1,29 @@
 package fitnesse.responders.editing;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static util.RegexTestCase.assertSubString;
+
 import fitnesse.FitNesseContext;
 import fitnesse.Responder;
 import fitnesse.http.MockRequest;
 import fitnesse.http.SimpleResponse;
 import fitnesse.testutil.FitNesseUtil;
-import fitnesse.wiki.*;
+import fitnesse.wiki.PageCrawler;
+import fitnesse.wiki.PageData;
+import fitnesse.wiki.PathParser;
+import fitnesse.wiki.WikiPage;
+import fitnesse.wiki.WikiPagePath;
+import fitnesse.wiki.WikiPageUtil;
+import fitnesse.wiki.mem.InMemoryPage;
 import org.junit.Before;
 import org.junit.Test;
-import static util.RegexTestCase.*;
 
 public class AddChildPageResponderTest {
-  private WikiPage root;
-  private WikiPage childPage;
   private PageData childPageData;
   private PageCrawler crawler;
   private String childName;
-  private String childContent;
-  private String pagetype;
   private MockRequest request;
   private FitNesseContext context;
   private Responder responder;
@@ -25,13 +31,13 @@ public class AddChildPageResponderTest {
 
   @Before
   public void setUp() throws Exception {
-    root = InMemoryPage.makeRoot("root");
+    WikiPage root = InMemoryPage.makeRoot("root");
     
     crawler = root.getPageCrawler();
-    crawler.addPage(root, PathParser.parse("TestPage"));
+    WikiPageUtil.addPage(root, PathParser.parse("TestPage"));
     childName = "ChildPage";
-    childContent = "child content";
-    pagetype = "";
+    String childContent = "child content";
+    String pagetype = "";
     request = new MockRequest();
     request.setResource("TestPage");
     request.addInput("pageName", childName);
@@ -48,7 +54,6 @@ public class AddChildPageResponderTest {
     final String body = response.getContent();
     assertEquals("", body);
     assertEquals(response.getStatus(), 303);
-
   }
 
   @Test
@@ -57,9 +62,9 @@ public class AddChildPageResponderTest {
     String suites = "tag";
     request.addInput("helpText", helpText);
     request.addInput("suites", suites);
-    assertTrue(crawler.getPage(root, path) == null);
+    assertTrue(crawler.getPage(path) == null);
     responder.makeResponse(context, request);
-    assertTrue(crawler.getPage(root, path) != null);
+    assertTrue(crawler.getPage(path) != null);
     getChildPage(childName);
     assertEquals(suites, childPageData.getAttribute("Suites"));
     assertEquals(helpText, childPageData.getAttribute("Help"));
@@ -68,9 +73,9 @@ public class AddChildPageResponderTest {
   @Test
   public void noPageIsMadeIfNameIsNull() throws Exception {
     request.addInput("pageName", "");
-    assertTrue(crawler.getPage(root, path) == null);
+    assertTrue(crawler.getPage(path) == null);
     responder.makeResponse(context, request);
-    assertTrue(crawler.getPage(root, path) == null);
+    assertTrue(crawler.getPage(path) == null);
   }
 
   @Test
@@ -165,9 +170,8 @@ public class AddChildPageResponderTest {
     return childPageData.hasAttribute("Test");
   }
 
-
   private void getChildPage(String childName) throws Exception {
-    childPage = crawler.getPage(root, PathParser.parse("TestPage."+ childName));
+    WikiPage childPage = crawler.getPage(PathParser.parse("TestPage." + childName));
     childPageData = childPage.getData();
   }
 }
