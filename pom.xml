@@ -13,6 +13,10 @@
 		<url>https://github.com/liveSense/org.liveSense.framework.fitnesse</url>
 	</scm>
 
+    <properties>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+    </properties>
+
 	<artifactId>org.liveSense.framework.fitnesse</artifactId>
 	<name>liveSense :: Framework :: fitnesse</name>
 	<description> The fully integrated standalone wiki, and acceptance
