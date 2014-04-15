@@ -3,9 +3,10 @@
 	<parent>
 		<groupId>com.github.livesense</groupId>
 		<artifactId>org.liveSense.parent</artifactId>
-		<version>2-SNAPSHOT</version>
+		<version>1.0.3</version>
 		<relativePath>..</relativePath>
 	</parent>
+    <version>1.0.3-SNAPSHOT</version>
 	<scm>
 		<connection>scm:git:https://github.com/liveSense/org.liveSense.framework.fitnesse.git</connection>
 		<developerConnection>scm:git:https://github.com/liveSense/org.liveSense.framework.fitnesse.git</developerConnection>
@@ -17,7 +18,6 @@
 	<description> The fully integrated standalone wiki, and acceptance
     testing framework. </description>
 	<url>http://fitnesse.org</url>
-	<version>20130316_1-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<licenses>
 		<license>
