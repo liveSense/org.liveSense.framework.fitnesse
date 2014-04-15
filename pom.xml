@@ -6,12 +6,13 @@
 		<version>1.0.3</version>
 		<relativePath>..</relativePath>
 	</parent>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.3</version>
 	<scm>
 		<connection>scm:git:https://github.com/liveSense/org.liveSense.framework.fitnesse.git</connection>
 		<developerConnection>scm:git:https://github.com/liveSense/org.liveSense.framework.fitnesse.git</developerConnection>
 		<url>https://github.com/liveSense/org.liveSense.framework.fitnesse</url>
-	</scm>
+	  <tag>1.0.3</tag>
+  </scm>
 
 	<artifactId>org.liveSense.framework.fitnesse</artifactId>
 	<name>liveSense :: Framework :: fitnesse</name>
@@ -141,7 +142,7 @@
                             <executable>java</executable>
                             <arguments>
                                 <argument>-classpath</argument>
-                                <classpath/>
+                                <classpath />
                                 <argument>fitnesseMain.FitNesseMain</argument>
                                 <argument>-p</argument>
                                 <argument>8880</argument>
@@ -163,7 +164,7 @@
                                 <argument>-classpath</argument>
                                 <!-- automatically creates the classpath using all project dependencies,
                                  also adding the project build directory -->
-                                <classpath/>
+                                <classpath />
                                 <argument>fitnesse.updates.UpdateFileList</argument>
                                 <argument>-baseDirectory:.</argument>
                                 <argument>-outputDirectory:${project.build.directory}/classes/Resources</argument>
@@ -217,10 +218,10 @@
 						<phase>process-resources</phase>
 						<configuration>
 							<tasks>
-								<mkdir dir="${project.build.directory}/classes/Resources"/>
-								<mkdir dir="${project.build.directory}/classes/fitnesse/resources"/>
-								<copydir src="${basedir}/FitNesseRoot" dest="${project.build.directory}/classes/Resources/FitNesseRoot"/>
-								<copydir src="${basedir}/src/fitnesse/resources" dest="${project.build.directory}/classes/fitnesse/resources"/>
+								<mkdir dir="${project.build.directory}/classes/Resources" />
+								<mkdir dir="${project.build.directory}/classes/fitnesse/resources" />
+								<copydir src="${basedir}/FitNesseRoot" dest="${project.build.directory}/classes/Resources/FitNesseRoot" />
+								<copydir src="${basedir}/src/fitnesse/resources" dest="${project.build.directory}/classes/fitnesse/resources" />
 
 							</tasks>
 						</configuration>
